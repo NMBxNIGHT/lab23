@@ -1,9 +1,60 @@
 #include <windows.h>
 
+HWND textfield,button[4],textbox[2];
 /* This is where all the input to the window goes to */
 LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) {
 	switch(Message) {
 		
+		case WM_CREATE:{
+			textfield = CreateWindow("STATIC",
+									"Please input two numbers",
+									WS_VISIBLE|WS_CHILD|WS_BORDER,
+									20,20,200,25, // x,y position,word width,word height
+									hwnd,NULL,NULL,NULL);
+			textbox[1]	= CreateWindow("EDIT","",WS_VISIBLE|WS_BORDER|WS_CHILD,
+									20,55,200,25,
+									hwnd,NULL,NULL,NULL);
+			textbox[2]	= CreateWindow("EDIT","",WS_VISIBLE|WS_BORDER|WS_CHILD,
+									20,85,200,25,
+									hwnd,NULL,NULL,NULL);
+			button[0] = CreateWindow("BUTTON","+",
+									WS_VISIBLE|WS_CHILD|WS_BORDER,
+									25,120,35,35,
+									hwnd,(HMENU) 1,NULL,NULL);
+			button[1] = CreateWindow("BUTTON","-",
+									WS_VISIBLE|WS_CHILD|WS_BORDER,
+									75,120,35,35,
+									hwnd,(HMENU) 2,NULL,NULL);
+			button[2] = CreateWindow("BUTTON","*",
+									WS_VISIBLE|WS_CHILD|WS_BORDER,
+									125,120,35,35,
+									hwnd,(HMENU) 3,NULL,NULL);
+			button[3] = CreateWindow("BUTTON","/",
+									WS_VISIBLE|WS_CHILD|WS_BORDER,
+									175,120,35,35,
+									hwnd,(HMENU) 4,NULL,NULL);	
+			
+			break;s
+		}
+
+		case WM_COMMAND:{
+			switch (LOWORD(wParam)){
+				case 1:
+					::MessageBeep(MB_ICONERROR);
+					::MessageBox(hwnd,"Burron was clicked","Button was clicked",MB_OK);
+					break;
+				case 2:
+
+					break;
+				case 3:
+
+					break;
+				case 4:
+
+					break;
+	
+			}
+		}
 		/* Upon destruction, tell the main thread to stop */
 		case WM_DESTROY: {
 			PostQuitMessage(0);
@@ -41,11 +92,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		return 0;
 	}
 
-	hwnd = CreateWindowEx(WS_EX_CLIENTEDGE,"WindowClass","Caption",WS_VISIBLE|WS_OVERLAPPEDWINDOW,
+	hwnd = CreateWindowEx(WS_EX_CLIENTEDGE,"WindowClass","My Calculator",WS_VISIBLE|WS_MINIMIZEBOX|WS_SYSMENU,
 		CW_USEDEFAULT, /* x */
 		CW_USEDEFAULT, /* y */
-		640, /* width */
-		480, /* height */
+		250, /* width */
+		200, /* height */
 		NULL,NULL,hInstance,NULL);
 
 	if(hwnd == NULL) {
