@@ -1,6 +1,8 @@
 #include <windows.h>
-
-HWND textfield,button[4],textbox[2];
+#include <stdio.h>
+HWND textfield,textbox[2];
+char textsave1[20],textsave2[20];
+double ftxt1=0,ftxt2=0;
 /* This is where all the input to the window goes to */
 LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) {
 	switch(Message) {
@@ -11,49 +13,59 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
 									WS_VISIBLE|WS_CHILD|WS_BORDER,
 									20,20,200,25, // x,y position,word width,word height
 									hwnd,NULL,NULL,NULL);
-			textbox[1]	= CreateWindow("EDIT","",WS_VISIBLE|WS_BORDER|WS_CHILD,
+			textbox[0]	= CreateWindowW(L"EDIT",L"",WS_VISIBLE|WS_BORDER|WS_CHILD,
 									20,55,200,25,
 									hwnd,NULL,NULL,NULL);
-			textbox[2]	= CreateWindow("EDIT","",WS_VISIBLE|WS_BORDER|WS_CHILD,
+			textbox[1]	= CreateWindowW(L"EDIT",L"",WS_VISIBLE|WS_BORDER|WS_CHILD,
 									20,85,200,25,
 									hwnd,NULL,NULL,NULL);
-			button[0] = CreateWindow("BUTTON","+",
+			CreateWindow("BUTTON","+",
 									WS_VISIBLE|WS_CHILD|WS_BORDER,
 									25,120,35,35,
 									hwnd,(HMENU) 1,NULL,NULL);
-			button[1] = CreateWindow("BUTTON","-",
+			CreateWindow("BUTTON","-",
 									WS_VISIBLE|WS_CHILD|WS_BORDER,
 									75,120,35,35,
 									hwnd,(HMENU) 2,NULL,NULL);
-			button[2] = CreateWindow("BUTTON","*",
+			CreateWindow("BUTTON","*",
 									WS_VISIBLE|WS_CHILD|WS_BORDER,
 									125,120,35,35,
 									hwnd,(HMENU) 3,NULL,NULL);
-			button[3] = CreateWindow("BUTTON","/",
+			CreateWindow("BUTTON","/",
 									WS_VISIBLE|WS_CHILD|WS_BORDER,
 									175,120,35,35,
 									hwnd,(HMENU) 4,NULL,NULL);	
 			
-			break;s
+			break;
 		}
 
 		case WM_COMMAND:{
+			GetWindowText(textbox[0],&textsave1[0],20);
+			GetWindowText(textbox[1],&textsave2[0],20);
+			ftxt1 = atof(textsave1);
+			ftxt2 = atof(textsave2);
 			switch (LOWORD(wParam)){
 				case 1:
-					::MessageBeep(MB_ICONERROR);
-					::MessageBox(hwnd,"Burron was clicked","Button was clicked",MB_OK);
+					sprintf(textsave1,"%f",ftxt1+ftxt2);
+					::MessageBox(hwnd,textsave1,"Button was clicked",MB_OK);
 					break;
 				case 2:
-
+					sprintf(textsave1,"%f",ftxt1-ftxt2);
+					::MessageBox(hwnd,textsave1,"Button was clicked",MB_OK);
 					break;
 				case 3:
-
+					sprintf(textsave1,"%f",ftxt1*ftxt2);
+					::MessageBox(hwnd,textsave1,"Button was clicked",MB_OK);
 					break;
 				case 4:
+					sprintf(textsave1,"%f",ftxt1/ftxt2);
+					::MessageBox(hwnd,textsave1,"Button was clicked",MB_OK);
+					break;
+				default :
 
 					break;
-	
 			}
+			break;
 		}
 		/* Upon destruction, tell the main thread to stop */
 		case WM_DESTROY: {
@@ -82,7 +94,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	wc.hCursor	 = LoadCursor(NULL, IDC_ARROW);
 	
 	/* White, COLOR_WINDOW is just a #define for a system color, try Ctrl+Clicking it */
-	wc.hbrBackground = (HBRUSH)(COLOR_WINDOW+1);
+	wc.hbrBackground = (HBRUSH)(27);
 	wc.lpszClassName = "WindowClass";
 	wc.hIcon	 = LoadIcon(NULL, IDI_APPLICATION); /* Load a standard icon */
 	wc.hIconSm	 = LoadIcon(NULL, IDI_APPLICATION); /* use the name "A" to use the project icon */
